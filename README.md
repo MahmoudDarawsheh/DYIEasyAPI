@@ -306,7 +306,7 @@ void setup() {
 }
 
 void loop() {
-  if (!UseEEPROMConfig) {
+  if (UseEEPROMConfig) {
     CheckIfUserChangedNetworkCreds();
   }
 
