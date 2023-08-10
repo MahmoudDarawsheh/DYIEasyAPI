@@ -7,6 +7,7 @@ String ssid;
 String password;
 String storedSSID;
 String storedPassword;
+int PinToIndicate = -1;
 void clearEEPROM() {
   for (int i = 0; i < EEPROM.length(); i++) {
     EEPROM.write(i, 0);
@@ -34,8 +35,11 @@ bool IsWifiConnected(){
   return  WiFi.status() == WL_CONNECTED;
 }
 bool ConnectToWifi(String ssid, String password ,int WaitToConnect, bool Debug) {
-  pinMode(D3, OUTPUT);
-  digitalWrite(D3, LOW);
+  if(PinToIndicate!=-1)
+    {
+  pinMode(PinToIndicate, OUTPUT);
+  digitalWrite(PinToIndicate, LOW);
+    }
   if (Debug) {
 
     Serial.print("Connecting to ");
@@ -45,10 +49,15 @@ bool ConnectToWifi(String ssid, String password ,int WaitToConnect, bool Debug) 
   WiFi.begin(ssid.c_str(), password.c_str());
   int CurrentWait = 0;
   while (WiFi.status() != WL_CONNECTED && WaitToConnect != -1 && CurrentWait < WaitToConnect) {
-    digitalWrite(D3, HIGH);
+ if(PinToIndicate!=-1)
+    {
+    digitalWrite(PinToIndicate, HIGH);
     delay(500);
-    digitalWrite(D3, LOW);
+    digitalWrite(PinToIndicate, LOW);
     delay(500);
+    }else{
+      delay(1000);
+    }
     if (Debug) {
       Serial.print(".");
     }
@@ -61,8 +70,10 @@ bool ConnectToWifi(String ssid, String password ,int WaitToConnect, bool Debug) 
       Serial.println(WiFi.localIP());
       Serial.println(WiFi.getHostname());
     }
-    digitalWrite(D3, HIGH);
-
+if(PinToIndicate!=-1)
+    {
+    digitalWrite(PinToIndicate, HIGH);
+    }
 
 
     return true;
@@ -71,7 +82,10 @@ bool ConnectToWifi(String ssid, String password ,int WaitToConnect, bool Debug) 
       Serial.println("WiFi connection fails");
       Serial.println("Ignore Wifi");
     }
-    digitalWrite(D3, LOW);
+    if(PinToIndicate!=-1)
+    {
+    digitalWrite(PinToIndicate, LOW);
+    }
     return false;
   }
 }
@@ -213,4 +227,8 @@ IPAddress calculateSubnetMask(const IPAddress& ip, const IPAddress& gateway) {
     (ip[1] & gateway[1]),
     (ip[2] & gateway[2]),
     (ip[3] & gateway[3]));
+}
+void SetLEDIndecator(int LEDPin){
+
+  PinToIndicate=LEDPin;
 }

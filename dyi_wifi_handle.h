@@ -21,5 +21,5 @@ void storeIPAddress(const String& ipString);
 IPAddress readIPAddressFromEEPROM();
 void CheckIfUserChangedNetworkCreds();
 bool IsWifiConnected();
-
+void SetLEDIndecator(int LEDPin);
 #endif
