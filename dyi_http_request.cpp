@@ -14,7 +14,7 @@ String SendSecureRequest(String url, bool debug) {
     url.remove(0, 8);
   } else {
     if (debug) {
-      Serial.println("Invalid URL protocol");
+      //serial.println("Invalid URL protocol");
     }
     return "";
   }
@@ -39,17 +39,17 @@ String SendSecureRequest(String url, bool debug) {
   // Use WiFiClientSecure class to create TLS connection
   WiFiClientSecure client;
   if (debug) {
-    Serial.print("Connecting to ");
-    Serial.print(hostname);
-    Serial.print(":");
-    Serial.println(port);
+    //serial.print("Connecting to ");
+    //serial.print(hostname);
+    //serial.print(":");
+    //serial.println(port);
   }
 
   client.setInsecure(); // Disable certificate verification
 
   if (!client.connect(hostname, port)) {
     if (debug) {
-      Serial.println("Connection failed");
+      //serial.println("Connection failed");
     }
     return "";
   }
@@ -60,7 +60,7 @@ String SendSecureRequest(String url, bool debug) {
                "Connection: close\r\n\r\n");
 
   if (debug) {
-    Serial.println("Request sent");
+    //serial.println("Request sent");
   }
 
   String response;
@@ -74,11 +74,11 @@ String SendSecureRequest(String url, bool debug) {
         if (line == "\r") {
           isBody = true;
           if (debug) {
-            Serial.println("Response headers received");
+            //serial.println("Response headers received");
           }
         } else {
           if (debug) {
-            Serial.println(line);
+            //serial.println(line);
           }
         }
       } else {
@@ -89,7 +89,7 @@ String SendSecureRequest(String url, bool debug) {
   }
 
   if (debug) {
-    Serial.println("Closing connection");
+    //serial.println("Closing connection");
   }
 
   return response;
@@ -103,7 +103,7 @@ String SendRequest(String url, bool debug = false) {
   digitalWrite(D3, LOW);
   if (WiFi.status() == WL_CONNECTED) {
     if (debug) {
-      Serial.println("Trying to send HTTP request to ring the bell");
+      //serial.println("Trying to send HTTP request to ring the bell");
     }
     HTTPClient httpClient;
     httpClient.begin(client, url.c_str());
@@ -113,15 +113,15 @@ String SendRequest(String url, bool debug = false) {
     httpClient.end();
 
     if (debug) {
-      Serial.println(content);
-      Serial.println("Notifying Deaf users");
+      //serial.println(content);
+      //serial.println("Notifying Deaf users");
     }
     
     digitalWrite(D3, HIGH);
     return content;
   } else {
     if (debug) {
-      Serial.println("WiFi connection fails");
+      //serial.println("WiFi connection fails");
     }
     digitalWrite(D3, LOW);
   }
